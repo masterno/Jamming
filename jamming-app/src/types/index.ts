@@ -4,4 +4,5 @@ export interface TrackData {
   artist: string;
   album: string;
   uri: string;
+  image?: string; // Added for album art URL
 }

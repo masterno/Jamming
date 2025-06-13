@@ -115,14 +115,22 @@ const Spotify = {
           return [];
         }
 
-        return jsonResponse.tracks.items.map((track: any) => ({
-          id: track.id,
-          name: track.name,
-          artist: track.artists && track.artists.length > 0 ? track.artists[0].name : 'Unknown Artist',
-          album: track.album && track.album.name ? track.album.name : 'Unknown Album',
-          uri: track.uri,
+        return jsonResponse.tracks.items.map((track: any) => {
+          const albumImage = track.album && track.album.images && track.album.images.length > 0 
+            ? track.album.images[track.album.images.length - 1].url // Default to the last image (often smallest)
+            : undefined; // Or a placeholder image URL
+
+          return {
+            id: track.id,
+            name: track.name,
+            artist: track.artists && track.artists.length > 0 ? track.artists[0].name : 'Unknown Artist',
+            album: track.album && track.album.name ? track.album.name : 'Unknown Album',
+            uri: track.uri,
+            image: albumImage,
+          };
         }));
     } catch (error) {
+        // console.error('Spotify search failed:', error);
         console.error('Spotify search failed:', error);
         return []; // Return an empty array on error
     }
