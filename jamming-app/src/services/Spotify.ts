@@ -115,7 +115,7 @@ const Spotify = {
           return [];
         }
 
-        return jsonResponse.tracks.items.map((track: any) => {
+        return Promise.all(jsonResponse.tracks.items.map(async (track: any) => {
           const albumImage = track.album && track.album.images && track.album.images.length > 0 
             ? track.album.images[track.album.images.length - 1].url // Default to the last image (often smallest)
             : undefined; // Or a placeholder image URL
