@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import './App.css';
+
 import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
 import Playlist from './components/Playlist';
 import Spotify from './services/Spotify';
 import type { TrackData } from './types';
+import { Button } from "@/components/ui/button";
 
 function App() {
   const [searchResults, setSearchResults] = useState<TrackData[]>([]);
@@ -68,8 +69,11 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Ja<span className="highlight">mmm</span>ing</h1>
+    <div className="App p-8 bg-gray-900 text-white min-h-screen"> {/* Example Tailwind classes */}
+      <h1 className="text-5xl font-bold mb-8 text-center text-purple-400">Ja<span className="text-green-400">mmm</span>ing</h1> {/* Example Tailwind classes */}
+      <div className="text-center mb-8">
+        <Button variant="secondary" size="lg">ShadCN Test Button</Button>
+      </div>
       <div className="App-playlist">
         <SearchBar onSearch={performSearch} />
         <div className="App-content">
