@@ -33,9 +33,9 @@ export default function JammmingLandingPage({
     const initAuth = async () => {
       try {
         // getAccessToken will handle redirect or return existing token from session storage
-        const token = await Spotify.getAccessToken();
+        const token = await Spotify.getAccessToken(false);
         // If getAccessToken completes without redirecting and returns a token (it might return void or a promise that never resolves if it redirects)
-        if (token && typeof token === 'string') { 
+        if (token) { // token is now string | null, so just check if it's truthy (a string) 
           setSpotifyAccessToken(token);
         }
         // If getAccessToken redirects, this part of the code might not be reached immediately,
@@ -52,7 +52,7 @@ export default function JammmingLandingPage({
     if (!spotifyAccessToken) { 
         initAuth();
     }
-  }, []);
+  }, [spotifyAccessToken, setSpotifyAccessToken]);
 
   useEffect(() => {
     initializeAuth();
@@ -138,8 +138,8 @@ export default function JammmingLandingPage({
   return <div className={cn("min-h-screen bg-gradient-to-br from-white via-green-50/30 to-white", className)}>
       {/* Header */}
       <header className="w-full px-4 py-6 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center flex-1 tracking-tight" initial={{
+        <div className="max-w-7xl mx-auto flex items-center justify-center relative">
+          <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent" initial={{
           opacity: 0,
           scale: 0.9
         }} animate={{
@@ -151,7 +151,7 @@ export default function JammmingLandingPage({
             Jammming
           </motion.h1>
           
-          <motion.div initial={{
+          <motion.div className="absolute right-0" initial={{
           opacity: 0,
           x: 20
         }} animate={{

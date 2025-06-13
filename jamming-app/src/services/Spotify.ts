@@ -25,7 +25,7 @@ const base64encode = (input: ArrayBuffer): string => {
 };
 
 const Spotify = {
-  async getAccessToken(): Promise<string> {
+  async getAccessToken(redirectIfMissing: boolean = true): Promise<string | null> {
     // 1. Check for a valid token in session storage
     const tokenFromSession = window.sessionStorage.getItem('spotify_access_token');
     const expiryTimeFromSession = window.sessionStorage.getItem('spotify_token_expiry_time');
@@ -72,7 +72,7 @@ const Spotify = {
       // Clean the URL and return the token
       window.history.pushState({}, '', '/');
       return access_token;
-    } else {
+    } else if (redirectIfMissing) {
       // 3. No token and no code, so we need to redirect the user to Spotify to log in
       const codeVerifier = generateRandomString(64);
       window.sessionStorage.setItem('spotify_code_verifier', codeVerifier);
@@ -92,7 +92,9 @@ const Spotify = {
       window.location.assign(authUrl);
       // This part of the code will not be reached because of the redirect.
       // We return a promise that never resolves to prevent further execution.
-      return new Promise(() => {});
+      return new Promise(() => {}); // Should not be reached
+    } else {
+      return null; // No token, no code, and not redirecting
     }
   },
 
