@@ -1,12 +1,14 @@
 const CLIENT_ID = 'af33bf99442c4150bbe5e3aa559325ca'; // Your Spotify Client ID
 const REDIRECT_URI = 'https://jamming-app-noahm.windsurf.build/'; // Your Redirect URI
 
-let accessToken: string | undefined;
-
 const Spotify = {
   getAccessToken(): string | undefined {
-    if (accessToken) {
-      return accessToken;
+    // 1. Check for token in sessionStorage
+    const tokenFromSession = window.sessionStorage.getItem('spotify_access_token');
+    const expiryTimeFromSession = window.sessionStorage.getItem('spotify_token_expiry_time');
+
+    if (tokenFromSession && expiryTimeFromSession && Date.now() < Number(expiryTimeFromSession)) {
+      return tokenFromSession;
     }
 
     // Check if the access token is in the URL
@@ -14,19 +16,27 @@ const Spotify = {
     const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
 
     if (accessTokenMatch && expiresInMatch) {
-      accessToken = accessTokenMatch[1];
+      const newAccessToken = accessTokenMatch[1];
       const expiresIn = Number(expiresInMatch[1]);
+      const newExpiryTime = Date.now() + expiresIn * 1000;
 
-      // Clear parameters from URL, so the app doesn't try to grab token again
-      window.setTimeout(() => accessToken = '', expiresIn * 1000);
-      window.history.pushState('Access Token', '', '/'); // Clears the URL
-      return accessToken;
-    } else {
-      // Redirect user to Spotify authorization
+      // 2. Store new token and expiry time in sessionStorage
+      window.sessionStorage.setItem('spotify_access_token', newAccessToken);
+      window.sessionStorage.setItem('spotify_token_expiry_time', String(newExpiryTime));
+
+      // Clear parameters from URL
+      window.history.pushState('Access Token', '', '/');
+      return newAccessToken;
+    } else if (!window.location.href.includes('access_token=')) {
+      // Only redirect if there's no token info in URL at all
+      // This prevents redirecting if we're on the callback but something else went wrong
+      // console.log('No token in URL, redirecting to Spotify for auth...');
       const accessUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
-      window.location.href = accessUrl;
+      window.location.assign(accessUrl); // Use assign to ensure it's a full navigation
     }
-    return undefined; // Should not be reached if redirect happens
+    // If we are on the callback URL but parsing failed, or if redirect is pending, return undefined
+    // This avoids an immediate redirect loop if parsing fails on the callback.
+    return undefined;
   },
 
   search(term: string): Promise<any[]> {
