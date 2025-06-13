@@ -1,0 +1,80 @@
+/* General App Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #010c3f; /* Dark blue background */
+  color: #fff; /* White text */
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  padding: 20px;
+}
+
+.App h1 {
+  text-align: center;
+  font-size: 2.5em;
+  color: #6c41ec; /* A vibrant purple for the title */
+  margin-bottom: 30px;
+}
+
+.App h1 .highlight {
+  color: #00d856; /* Spotify green for 'mmm' */
+}
+
+/* Layout for SearchResults and Playlist */
+.App-content {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.App-content > div { /* Targets SearchResults and Playlist containers */
+  width: 45%;
+  background-color: rgba(108, 65, 237, 0.1); /* Semi-transparent purple */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Styling for individual components (can be moved to their own CSS files later) */
+
+/* SearchBar */
+/* (Assuming SearchBar.tsx will have its own div or section wrapper if needed) */
+input[type="text"] {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #6c41ec;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #1db954; /* Spotify green */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #1aa34a;
+}
+
+/* Track & TrackList (general styling for items within lists) */
+/* (Assuming Track.tsx and TrackList.tsx will have appropriate structure) */
+.App-content h2 {
+  border-bottom: 1px solid #6c41ec;
+  padding-bottom: 10px;
+  margin-top: 0;
+}
+
+/* Placeholder for where tracks would be listed */
+/* This is very generic; specific Track/TrackList styling will be needed */
+.App-content > div > div { /* A bit fragile, targets TrackList's inner div */
+  margin-top: 15px;
+}
+
