@@ -127,6 +127,56 @@ const Spotify = {
         return []; // Return an empty array on error
     }
   },
+
+  async savePlaylist(playlistName: string, trackUris: string[]): Promise<void> {
+    if (!playlistName || !trackUris.length) {
+      console.log('Playlist name or tracks are empty. Aborting save.');
+      return;
+    }
+
+    try {
+      const accessToken = await this.getAccessToken();
+      const headers = { 
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      };
+
+      // 1. Get current user's ID
+      const userResponse = await fetch('https://api.spotify.com/v1/me', { headers: { Authorization: `Bearer ${accessToken}` } });
+      if (!userResponse.ok) {
+        throw new Error(`Failed to fetch user data: ${await userResponse.text()}`);
+      }
+      const userData = await userResponse.json();
+      const userId = userData.id;
+
+      // 2. Create a new playlist
+      const playlistResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ name: playlistName }),
+      });
+      if (!playlistResponse.ok) {
+        throw new Error(`Failed to create playlist: ${await playlistResponse.text()}`);
+      }
+      const playlistData = await playlistResponse.json();
+      const playlistId = playlistData.id;
+
+      // 3. Add tracks to the new playlist
+      const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ uris: trackUris }),
+      });
+
+      if (!addTracksResponse.ok) {
+        throw new Error(`Failed to add tracks to playlist: ${await addTracksResponse.text()}`);
+      }
+      console.log('Playlist saved successfully!');
+
+    } catch (error) {
+      console.error('Error saving playlist to Spotify:', error);
+    }
+  },
 };
 
 export default Spotify;

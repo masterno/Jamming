@@ -4,19 +4,11 @@ import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
 import Playlist from './components/Playlist';
 import Spotify from './services/Spotify';
-
-// Define a simple type for track data for now
-interface TrackData {
-  id: string;
-  name: string;
-  artist: string;
-  album: string;
-  uri: string;
-}
+import type { TrackData } from './types';
 
 function App() {
   const [searchResults, setSearchResults] = useState<TrackData[]>([]);
-  const [playlistName, setPlaylistName] = useState<string>('My Awesome Playlist');
+  const [playlistName, setPlaylistName] = useState('New Playlist');
   const [playlistTracks, setPlaylistTracks] = useState<TrackData[]>([]);
   // @ts-ignore: Will be used later for API calls
   const [spotifyAccessToken, setSpotifyAccessToken] = useState<string | undefined>(undefined);
@@ -51,23 +43,28 @@ function App() {
 
 
   // Placeholder functions - to be implemented later
-  const addTrackToPlaylist = (track: TrackData) => {
-    if (!playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
-      setPlaylistTracks(prevTracks => [...prevTracks, track]);
+  const addTrack = (track: TrackData) => {
+    if (playlistTracks.some(savedTrack => savedTrack.id === track.id)) {
+      return;
     }
+    setPlaylistTracks(prevTracks => [...prevTracks, track]);
   };
 
-  const removeTrackFromPlaylist = (track: TrackData) => {
-    setPlaylistTracks(prevTracks => prevTracks.filter(savedTrack => savedTrack.id !== track.id));
+  const removeTrack = (track: TrackData) => {
+    setPlaylistTracks(prevTracks => prevTracks.filter(currentTrack => currentTrack.id !== track.id));
   };
 
   const updatePlaylistName = (name: string) => {
     setPlaylistName(name);
   };
 
-  const savePlaylist = () => {
-    // This will eventually interact with the Spotify API
-    alert(`Playlist "${playlistName}" with ${playlistTracks.length} tracks saved! (Not really, this is a placeholder)`);
+  const savePlaylist = async () => {
+    const trackUris = playlistTracks.map(track => track.uri);
+    await Spotify.savePlaylist(playlistName, trackUris);
+    // Reset the playlist in the app after saving
+    setPlaylistName('New Playlist');
+    setPlaylistTracks([]);
+    alert('Playlist saved successfully to Spotify!');
   };
 
   return (
@@ -76,13 +73,13 @@ function App() {
       <div className="App-playlist">
         <SearchBar onSearch={performSearch} />
         <div className="App-content">
-          <SearchResults tracks={searchResults} onAddTrack={addTrackToPlaylist} />
-          <Playlist 
-            playlistName={playlistName} 
-            playlistTracks={playlistTracks} 
-            onNameChange={updatePlaylistName} 
-            onRemoveTrack={removeTrackFromPlaylist} 
-            onSave={savePlaylist} 
+          <SearchResults searchResults={searchResults} onAdd={addTrack} />
+          <Playlist
+            playlistName={playlistName}
+            playlistTracks={playlistTracks}
+            onRemove={removeTrack}
+            onNameChange={updatePlaylistName}
+            onSave={savePlaylist}
           />
         </div>
       </div>

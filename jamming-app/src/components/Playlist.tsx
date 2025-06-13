@@ -1,23 +1,16 @@
 import React from 'react';
 import TrackList from './TrackList';
-
-interface TrackData {
-  id: string;
-  name: string;
-  artist: string;
-  album: string;
-  uri: string;
-}
+import type { TrackData } from '../types';
 
 interface PlaylistProps {
   playlistName: string;
   playlistTracks: TrackData[];
-  onNameChange: (newName: string) => void;
-  onRemoveTrack: (track: TrackData) => void;
+  onNameChange: (name: string) => void;
+  onRemove: (track: TrackData) => void;
   onSave: () => void;
 }
 
-const Playlist: React.FC<PlaylistProps> = ({ playlistName, playlistTracks, onNameChange, onRemoveTrack, onSave }) => {
+const Playlist: React.FC<PlaylistProps> = ({ playlistName, playlistTracks, onNameChange, onRemove, onSave }) => {
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onNameChange(event.target.value);
   };
@@ -25,7 +18,7 @@ const Playlist: React.FC<PlaylistProps> = ({ playlistName, playlistTracks, onNam
   return (
     <div>
       <input value={playlistName} onChange={handleNameChange} />
-      <TrackList tracks={playlistTracks} onRemove={onRemoveTrack} isRemoval={true} />
+      <TrackList tracks={playlistTracks} onRemove={onRemove} isRemoval={true} />
       <button onClick={onSave}>SAVE TO SPOTIFY</button>
     </div>
   );

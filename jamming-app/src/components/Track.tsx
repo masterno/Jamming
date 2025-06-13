@@ -1,24 +1,35 @@
 import React from 'react';
 
+import type { TrackData } from '../types';
+
 interface TrackProps {
-  // Define props for track details later, e.g., name, artist, album
-  name: string;
-  artist: string;
-  album: string;
-  onAdd?: () => void; // Optional: Function to add track to playlist
-  onRemove?: () => void; // Optional: Function to remove track from playlist
-  isRemoval?: boolean; // Optional: To determine if the action is removal
+  track: TrackData;
+  onAdd?: (track: TrackData) => void;
+  onRemove?: (track: TrackData) => void;
+  isRemoval?: boolean;
 }
 
-const Track: React.FC<TrackProps> = ({ name, artist, album, onAdd, onRemove, isRemoval }) => {
+const Track: React.FC<TrackProps> = ({ track, onAdd, onRemove, isRemoval }) => {
+  const addTrack = () => {
+    if (onAdd) {
+      onAdd(track);
+    }
+  };
+
+  const removeTrack = () => {
+    if (onRemove) {
+      onRemove(track);
+    }
+  };
+
   return (
     <div>
-      <h3>{name}</h3>
-      <p>{artist} | {album}</p>
+      <h3>{track.name}</h3>
+      <p>{track.artist} | {track.album}</p>
       {isRemoval ? (
-        <button onClick={onRemove}>-</button>
+        <button onClick={removeTrack}>-</button>
       ) : (
-        <button onClick={onAdd}>+</button>
+        <button onClick={addTrack}>+</button>
       )}
     </div>
   );

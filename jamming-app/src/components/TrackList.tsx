@@ -1,13 +1,6 @@
 import React from 'react';
 import Track from './Track';
-
-interface TrackData {
-  id: string;
-  name: string;
-  artist: string;
-  album: string;
-  uri: string; // Spotify track URI
-}
+import type { TrackData } from '../types';
 
 interface TrackListProps {
   tracks: TrackData[];
@@ -22,11 +15,9 @@ const TrackList: React.FC<TrackListProps> = ({ tracks, onAdd, onRemove, isRemova
       {tracks.map(track => (
         <Track 
           key={track.id} 
-          name={track.name} 
-          artist={track.artist} 
-          album={track.album} 
-          onAdd={onAdd ? () => onAdd(track) : undefined}
-          onRemove={onRemove ? () => onRemove(track) : undefined}
+          track={track}
+          onAdd={onAdd}
+          onRemove={onRemove}
           isRemoval={isRemoval}
         />
       ))}

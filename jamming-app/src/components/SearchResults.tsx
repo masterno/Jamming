@@ -1,24 +1,17 @@
 import React from 'react';
 import TrackList from './TrackList';
-
-interface TrackData {
-  id: string;
-  name: string;
-  artist: string;
-  album: string;
-  uri: string;
-}
+import type { TrackData } from '../types';
 
 interface SearchResultsProps {
-  tracks: TrackData[];
-  onAddTrack: (track: TrackData) => void;
+  searchResults: TrackData[];
+  onAdd: (track: TrackData) => void;
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({ tracks, onAddTrack }) => {
+const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, onAdd }) => {
   return (
     <div>
       <h2>Results</h2>
-      <TrackList tracks={tracks} onAdd={onAddTrack} isRemoval={false} />
+      <TrackList tracks={searchResults} onAdd={onAdd} isRemoval={false} />
     </div>
   );
 };
