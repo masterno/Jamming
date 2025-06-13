@@ -275,10 +275,9 @@ export default function JammmingLandingPage({
                     
                     <div className="space-y-3 mt-4 pr-2 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
                       {playlistTracks.length > 0 ? playlistTracks.map((track, i) => (
-                        <motion.div 
+                        <div 
                           key={track.id} 
                           className="flex items-center justify-between p-3 bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200"
-                          variants={fadeInUp}
                         >
                           <div className="flex items-center space-x-3 overflow-hidden">
                             <img src={track.image || `https://picsum.photos/seed/playlist${i}/40`} alt={track.album || 'Album art'} className="w-10 h-10 rounded-md object-cover" />
@@ -290,7 +289,7 @@ export default function JammmingLandingPage({
                         <Button onClick={() => removeTrackFromPlaylist(track)} variant="ghost" size="icon" className="text-red-500 hover:text-red-700 hover:bg-red-100 rounded-full" aria-label={`Remove ${track.name} from playlist`}>
                           <MinusCircle className="w-5 h-5" />
                         </Button>
-                      </motion.div>
+                      </div>
                     )) : (
                       <p className="text-center text-gray-500 py-4">Your playlist is empty. Add some tracks!</p>
                     )}
