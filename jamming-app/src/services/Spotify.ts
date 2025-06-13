@@ -118,8 +118,8 @@ const Spotify = {
         return jsonResponse.tracks.items.map((track: any) => ({
           id: track.id,
           name: track.name,
-          artist: track.artists[0].name,
-          album: track.album.name,
+          artist: track.artists && track.artists.length > 0 ? track.artists[0].name : 'Unknown Artist',
+          album: track.album && track.album.name ? track.album.name : 'Unknown Album',
           uri: track.uri,
         }));
     } catch (error) {
