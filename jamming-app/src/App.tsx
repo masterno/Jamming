@@ -18,6 +18,7 @@ function App() {
   const [searchResults, setSearchResults] = useState<TrackData[]>([]);
   const [playlistName, setPlaylistName] = useState<string>('My Awesome Playlist');
   const [playlistTracks, setPlaylistTracks] = useState<TrackData[]>([]);
+  // @ts-ignore: Will be used later for API calls
   const [spotifyAccessToken, setSpotifyAccessToken] = useState<string | undefined>(undefined);
 
   useEffect(() => {
