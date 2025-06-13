@@ -21,17 +21,28 @@ function App() {
   // @ts-ignore: Will be used later for API calls
   const [spotifyAccessToken, setSpotifyAccessToken] = useState<string | undefined>(undefined);
 
-  const performSearch = (term: string) => {
-    Spotify.search(term).then(tracks => {
-      setSearchResults(tracks);
-    });
+  const performSearch = async (term: string) => {
+    try {
+      const results = await Spotify.search(term);
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Search failed:', error);
+    }
   };
 
   useEffect(() => {
-    const token = Spotify.getAccessToken();
-    setSpotifyAccessToken(token);
-    // Note: If token is undefined here, Spotify.getAccessToken() has already initiated a redirect.
-    // If token is successfully retrieved, it's stored in Spotify.ts and also here for potential direct use.
+    // On component mount, try to get the access token.
+    // This will handle the redirect flow.
+    const initializeAuth = async () => {
+      try {
+        const token = await Spotify.getAccessToken();
+        // @ts-ignore
+        setSpotifyAccessToken(token);
+      } catch (error) {
+        console.error('Authentication failed:', error);
+      }
+    };
+    initializeAuth();
   }, []);
 
   // If we don't have a token yet, and Spotify.getAccessToken() didn't redirect,
