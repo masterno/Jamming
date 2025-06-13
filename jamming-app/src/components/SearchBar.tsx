@@ -14,17 +14,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const search = () => {
     onSearch(term);
   };
-
   return (
     <div>
       {/* <h2>SearchBar Component</h2> */}
       <input 
         type="text" 
-        placeholder="Enter A Song Title" 
+        placeholder="Enter A Song, Album, or Artist" 
         value={term} 
         onChange={handleTermChange} 
       />
-      <button onClick={search}>SEARCH</button>
+      <button className="SearchButton" onClick={search}>SEARCH</button>
     </div>
   );
 };

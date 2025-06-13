@@ -29,7 +29,41 @@ const Spotify = {
     return undefined; // Should not be reached if redirect happens
   },
 
-  // We will add search and save playlist methods here later
+  search(term: string): Promise<any[]> {
+    const accessToken = Spotify.getAccessToken();
+    if (!accessToken) {
+      console.error('Access token is missing!');
+      return Promise.resolve([]);
+    }
+
+    return fetch(`https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(term)}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(`Request failed with status ${response.status}`);
+    })
+    .then(jsonResponse => {
+      if (!jsonResponse || !jsonResponse.tracks || !jsonResponse.tracks.items) {
+        return [];
+      }
+      return jsonResponse.tracks.items.map((track: any) => ({
+        id: track.id,
+        name: track.name,
+        artist: track.artists && track.artists.length > 0 ? track.artists[0].name : 'Unknown Artist',
+        album: track.album && track.album.name ? track.album.name : 'Unknown Album',
+        uri: track.uri
+      }));
+    })
+    .catch(error => {
+      console.error('Spotify search API error:', error);
+      return []; 
+    });
+  }
 };
 
 export default Spotify;

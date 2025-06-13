@@ -21,6 +21,12 @@ function App() {
   // @ts-ignore: Will be used later for API calls
   const [spotifyAccessToken, setSpotifyAccessToken] = useState<string | undefined>(undefined);
 
+  const performSearch = (term: string) => {
+    Spotify.search(term).then(tracks => {
+      setSearchResults(tracks);
+    });
+  };
+
   useEffect(() => {
     const token = Spotify.getAccessToken();
     setSpotifyAccessToken(token);
@@ -52,23 +58,12 @@ function App() {
     // This will eventually interact with the Spotify API
     alert(`Playlist "${playlistName}" with ${playlistTracks.length} tracks saved! (Not really, this is a placeholder)`);
   };
-  
-  // Dummy search results for now
-  const handleSearch = (term: string) => {
-    console.log(`Searching for: ${term}`); // Placeholder for actual search logic
-    // Simulate API call
-    setSearchResults([
-      { id: '1', name: 'Song A', artist: 'Artist X', album: 'Album P', uri: 'spotify:track:123' },
-      { id: '2', name: 'Song B', artist: 'Artist Y', album: 'Album Q', uri: 'spotify:track:456' },
-      { id: '3', name: 'Song C', artist: 'Artist Z', album: 'Album R', uri: 'spotify:track:789' },
-    ]);
-  };
 
   return (
     <div className="App">
       <h1>Ja<span className="highlight">mmm</span>ing</h1>
       <div className="App-playlist">
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={performSearch} />
         <div className="App-content">
           <SearchResults tracks={searchResults} onAddTrack={addTrackToPlaylist} />
           <Playlist 
