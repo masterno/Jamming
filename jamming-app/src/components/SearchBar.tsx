@@ -14,6 +14,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const search = () => {
     onSearch(term);
   };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      search();
+    }
+  };
+
   return (
     <div>
       {/* <h2>SearchBar Component</h2> */}
@@ -22,6 +29,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         placeholder="Enter A Song, Album, or Artist" 
         value={term} 
         onChange={handleTermChange} 
+        onKeyDown={handleKeyDown} // Added this line
       />
       <button className="SearchButton" onClick={search}>SEARCH</button>
     </div>
