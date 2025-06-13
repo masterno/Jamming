@@ -1,4 +1,13 @@
 import React from 'react';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import type { TrackData } from '../types';
 
@@ -23,15 +32,22 @@ const Track: React.FC<TrackProps> = ({ track, onAdd, onRemove, isRemoval }) => {
   };
 
   return (
-    <div>
-      <h3>{track.name}</h3>
-      <p>{track.artist} | {track.album}</p>
-      {isRemoval ? (
-        <button onClick={removeTrack}>-</button>
-      ) : (
-        <button onClick={addTrack}>+</button>
-      )}
-    </div>
+    <Card className="w-[350px] mb-4">
+      <CardHeader>
+        <CardTitle>{track.name}</CardTitle>
+        <CardDescription>{track.artist} | {track.album}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {/* Additional content can go here if needed */}
+      </CardContent>
+      <CardFooter className="flex justify-end">
+        {isRemoval ? (
+          <Button variant="outline" size="icon" onClick={removeTrack}>-</Button>
+        ) : (
+          <Button variant="outline" size="icon" onClick={addTrack}>+</Button>
+        )}
+      </CardFooter>
+    </Card>
   );
 };
 

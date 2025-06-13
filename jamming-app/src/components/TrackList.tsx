@@ -11,7 +11,7 @@ interface TrackListProps {
 
 const TrackList: React.FC<TrackListProps> = ({ tracks, onAdd, onRemove, isRemoval }) => {
   return (
-    <div>
+    <div className="flex flex-wrap gap-4 justify-start">
       {tracks.map(track => (
         <Track 
           key={track.id} 

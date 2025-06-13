@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
@@ -22,16 +24,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div>
+    <div className="flex w-full max-w-sm items-center space-x-2">
       {/* <h2>SearchBar Component</h2> */}
-      <input 
+      <Input 
         type="text" 
         placeholder="Enter A Song, Album, or Artist" 
         value={term} 
         onChange={handleTermChange} 
         onKeyDown={handleKeyDown} // Added this line
+        className="flex-grow"
       />
-      <button className="SearchButton" onClick={search}>SEARCH</button>
+      <Button onClick={search}>SEARCH</Button>
     </div>
   );
 };

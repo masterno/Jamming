@@ -5,7 +5,6 @@ import SearchResults from './components/SearchResults';
 import Playlist from './components/Playlist';
 import Spotify from './services/Spotify';
 import type { TrackData } from './types';
-import { Button } from "@/components/ui/button";
 
 function App() {
   const [searchResults, setSearchResults] = useState<TrackData[]>([]);
@@ -71,20 +70,23 @@ function App() {
   return (
     <div className="App p-8 bg-gray-900 text-white min-h-screen"> {/* Example Tailwind classes */}
       <h1 className="text-5xl font-bold mb-8 text-center text-purple-400">Ja<span className="text-green-400">mmm</span>ing</h1> {/* Example Tailwind classes */}
-      <div className="text-center mb-8">
-        <Button variant="secondary" size="lg">ShadCN Test Button</Button>
-      </div>
-      <div className="App-playlist">
-        <SearchBar onSearch={performSearch} />
-        <div className="App-content">
-          <SearchResults searchResults={searchResults} onAdd={addTrack} />
-          <Playlist
-            playlistName={playlistName}
-            playlistTracks={playlistTracks}
-            onRemove={removeTrack}
-            onNameChange={updatePlaylistName}
-            onSave={savePlaylist}
-          />
+      <div className="App-playlist flex flex-col items-center w-full">
+        <div className="w-full md:w-3/4 lg:w-1/2 mb-8">
+          <SearchBar onSearch={performSearch} />
+        </div>
+        <div className="App-content flex flex-col md:flex-row justify-around w-full space-y-8 md:space-y-0 md:space-x-8">
+          <div className="w-full md:w-1/2">
+            <SearchResults searchResults={searchResults} onAdd={addTrack} />
+          </div>
+          <div className="w-full md:w-1/2">
+            <Playlist
+              playlistName={playlistName}
+              playlistTracks={playlistTracks}
+              onRemove={removeTrack}
+              onNameChange={updatePlaylistName}
+              onSave={savePlaylist}
+            />
+          </div>
         </div>
       </div>
     </div>
