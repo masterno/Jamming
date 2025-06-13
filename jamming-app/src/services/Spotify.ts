@@ -1,5 +1,5 @@
 const CLIENT_ID = 'af33bf99442c4150bbe5e3aa559325ca'; // Your Spotify Client ID
-const REDIRECT_URI = 'https://localhost:5173/'; // Your Redirect URI
+const REDIRECT_URI = 'https://jamming-app-noahm.windsurf.build/'; // Your Redirect URI
 
 let accessToken: string | undefined;
 
